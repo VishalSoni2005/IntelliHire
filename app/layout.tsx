@@ -1,0 +1,31 @@
+import type { Metadata } from "next";
+import {Mona_Sans} from "next/font/google";
+import "./globals.css";
+import React from "react";
+
+const geistSans = Mona_Sans({
+  variable: "--font-mona-sans",
+  subsets: ["latin"],
+});
+
+
+export const metadata: Metadata = {
+  title: "IntelliHire",
+  description:
+    "A full-stack AI-powered platform for conducting mock interviews using voice-based AI and real-time code collaboration between recruiter and candidate.",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en" className="dark">
+      <body className={`${geistSans.className} antialiased`}
+      >
+        {children}
+      </body>
+    </html>
+  );
+}
