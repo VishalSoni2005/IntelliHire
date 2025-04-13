@@ -86,7 +86,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
               placeholder="Your email address"
             />
             <FormField
-            type="password"
+              type="password"
               control={form.control}
               name="password"
               label="password"
@@ -105,7 +105,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
           <Link
             href={!isSignIn ? "/sign-in" : "/sign-up"}
             className="font-bold text-user-primary ml-1">
-            {isSignIn ? "Join Us" : "Sign In"}
+            {isSignIn ? "Sign Up" : "Join Us"}
           </Link>
         </p>
       </div>
