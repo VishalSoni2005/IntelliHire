@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Mona_Sans } from "next/font/google";
 import "./globals.css";
 import React from "react";
+import ParticlesBackground from "@/components/ParticlesBackground";
 
 const monaSans = Mona_Sans({
   variable: "--font-mona-sans",
@@ -23,7 +24,10 @@ export default function RootLayout({
     <html
       lang="en"
       className="dark">
-      <body className={`${monaSans.className} antialiased pattern`}>{children}</body>
+      <body className={`${monaSans.className} antialiased `}>
+        <ParticlesBackground /> 
+        {children}
+      </body>
     </html>
   );
 }
