@@ -3,12 +3,14 @@
 import React from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
+import FormField from "./FormFeild";
 
 const AuthFormSchema = (type: FormType) => {
   return z.object({
@@ -19,6 +21,7 @@ const AuthFormSchema = (type: FormType) => {
 };
 
 const AuthForm = ({ type }: { type: FormType }) => {
+  const router = useRouter();
   const formSchema = AuthFormSchema(type);
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -34,9 +37,13 @@ const AuthForm = ({ type }: { type: FormType }) => {
   function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       if (type === "sign-up") {
-        console.log("sign-up", values);
+        // console.log("sign-up", values);
+        toast.success("Sign up successful");
+        router.push("/sign-in");
       } else {
-        console.log("sign-in", values);
+        // console.log("sign-in", values);
+        toast.success("Sign in successful");
+        router.push("/");
       }
     } catch (error) {
       console.log("Error from Auth form ", error);
@@ -63,9 +70,28 @@ const AuthForm = ({ type }: { type: FormType }) => {
           <form
             onSubmit={form.handleSubmit(onSubmit)}
             className="w-full space-y-6 mt-4 form">
-            {isSignIn && <p>name</p>}
-            <p>email</p>
-            <p>password</p>
+            {isSignIn && (
+              <FormField
+                control={form.control}
+                name="name"
+                label="name"
+                placeholder="Name"
+              />
+            )}
+            <FormField
+              control={form.control}
+              name="email"
+              label="email"
+              type="email"
+              placeholder="Your email address"
+            />
+            <FormField
+            type="password"
+              control={form.control}
+              name="password"
+              label="password"
+              placeholder="password"
+            />
             <Button
               className="btn"
               type="submit">
