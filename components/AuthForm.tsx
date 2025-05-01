@@ -7,14 +7,20 @@ import Link from "next/link";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useRouter } from "next/navigation";    //? used for navigation in nextjs
-import { useForm } from "react-hook-form";      //? Hook to initialize the form
+import { useRouter } from "next/navigation"; //? used for navigation in nextjs
+import { useForm } from "react-hook-form"; //? Hook to initialize the form
 
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { toast } from "sonner";
 
 import FormField from "./FormFeild";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { auth } from "@/firebase/client";
+import { signIn, signUp } from "@/lib/actions/auth.action";
 
 const AuthFormSchema = (type: FormType) => {
   return z.object({
@@ -26,7 +32,7 @@ const AuthFormSchema = (type: FormType) => {
 
 const AuthForm = ({ type }: { type: FormType }) => {
   const isSignIn = type === "sign-in";
-  const router = useRouter();   //? create a router to navigate
+  const router = useRouter(); //? create a router to navigate
   const formSchema = AuthFormSchema(type);
 
   //? 1. Define your form. similar to const [form, setForm] = useState({}) but different
@@ -40,20 +46,58 @@ const AuthForm = ({ type }: { type: FormType }) => {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       if (type === "sign-up") {
+        const { name, email, password } = values;
+
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+        const result = await signUp({
+          uid: userCredential.user.uid,
+          name: name!,
+          email: email,
+          password: password,
+        });
+        if (!result?.success) {
+          toast.error(result?.message);
+          return;
+        }
+
         console.log("sign-up", values);
         toast.success("Sign up successful");
         router.push("/");
       } else {
-          console.log("sign-in", values);
-          toast.success("Sign in successful");
-          router.push("/");
+        const { email, password } = values;
+        const userCredential = await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+        const idToken = await userCredential.user.getIdToken();
+
+        if (!idToken) {
+          toast.error("Something went wrong, please try again later");
+          return;
+        }
+
+        await signIn({
+          email: email,
+          idToken: idToken,
+        });
+
+        console.log("sign-in", values);
+        toast.success("Sign in successful");
+        router.push("/");
       }
     } catch (error) {
       console.log("Error from AuthForm ", error);
-      toast.error("Something went wrong")  
+      toast.error("Something went wrong");
     }
   }
 
