@@ -2,8 +2,9 @@
 import { auth, db } from "@/firebase/admin";
 import { cookies } from "next/headers";
 
-export const signUp = async (params: SignUpParams) => {
-  const { uid, name, email } = params;
+
+export const signUp = async (UserData: SignUpParams) => {
+  const { uid, name, email } = UserData;
   try {
     const userRecord = await db.collection("users").doc(uid).get();
 
@@ -19,6 +20,8 @@ export const signUp = async (params: SignUpParams) => {
       email,
       createdAt: new Date().toISOString(),
     });
+
+    
 
     return {
       success: true,
@@ -44,8 +47,8 @@ export const signUp = async (params: SignUpParams) => {
   }
 };
 
-export const signIn = async (params: SignInParams) => {
-  const { email, idToken } = params;
+export const signIn = async (signInInfo: SignInParams) => {
+  const { email, idToken } = signInInfo;
   try {
     const userRecord = await auth.getUserByEmail(email);
 

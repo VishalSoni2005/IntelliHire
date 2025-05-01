@@ -1,12 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
-import { getApp, getApps } from 'firebase/app';
+import { getApp, getApps } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-
-
-
 
 const firebaseConfig = {
   apiKey: "AIzaSyCr63lyvXfoJrV5aC6jpUkKVJjYxflVL3M",
@@ -23,4 +18,3 @@ const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 
 export const auth = getAuth(app);
 export const db = getFirestore(app);
-const analytics = getAnalytics(app);
