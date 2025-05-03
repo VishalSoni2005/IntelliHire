@@ -25,16 +25,16 @@ const Agent = ({ userName, userId, type }: AgentProps) => {
   return (
     <>
       <div className="call-view">
-        <div className="card-interview">
+        {/* AI Interviewer Card */}
+        <div className="card-interviewer">
           <div className="avatar">
             <Image
-              src={"/ai-avatar.png"}
-              alt="avatar"
+              src="/ai-avatar.png"
+              alt="profile-image"
               width={65}
               height={54}
               className="object-cover"
             />
-
             {isSpeaking && <span className="animate-speak" />}
           </div>
           <h3>AI Interviewer</h3>
@@ -75,7 +75,7 @@ const Agent = ({ userName, userId, type }: AgentProps) => {
             <span
               className={cn(
                 "absolute animate-ping rounded-full opacity-75",
-                (callStatus !== "CONNECTING") & "hidden"
+                callStatus !== "CONNECTING" && "hidden"
               )}
             />
             <span className="">

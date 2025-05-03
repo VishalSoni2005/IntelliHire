@@ -89,6 +89,7 @@ export async function setSessionCookie(idToken: string) {
   });
 }
 
+//* this function will be used to get currentuser on other components
 export const getCurrentUser = async (): Promise<User | null> => {
   const cookieStore = await cookies();
 
