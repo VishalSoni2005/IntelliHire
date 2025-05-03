@@ -7,12 +7,12 @@ export async function GET() {
   return Response.json(
     {
       success: true,
-      data: "Hello, Vercel AI SDK!",
+      data: "Hello, Route is Working",
     },
     { status: 200 }
   );
 }
-
+// function for question generation 
 export async function POST(request: Request) {
   const { type, role, level, techstack, amount, userid } = await request.json();
 

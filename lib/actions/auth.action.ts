@@ -2,7 +2,6 @@
 import { auth, db } from "@/firebase/admin";
 import { cookies } from "next/headers";
 
-
 export const signUp = async (UserData: SignUpParams) => {
   const { uid, name, email } = UserData;
   try {
@@ -20,8 +19,6 @@ export const signUp = async (UserData: SignUpParams) => {
       email,
       createdAt: new Date().toISOString(),
     });
-
-    
 
     return {
       success: true,
@@ -127,4 +124,55 @@ export async function isAuthenticated() {
   const user = await getCurrentUser();
 
   return !!user;
+}
+
+export async function getInterviewsByUserId(
+  userId: string
+): Promise<Interview[] | null> {
+  try {
+    const interviews = await db
+      .collection("intterviews")
+      .where("userId", "==", userId)
+      .orderBy("createdAt", "desc")
+      .get();
+
+    if (interviews.empty) {
+      return null;
+    }
+
+    return interviews.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    })) as Interview[];
+  } catch (error) {
+    console.error("Error fetching interviews:", error);
+    return null;
+  }
+}
+
+export async function getLatestInterview(
+  params: GetLatestInterviewsParams
+): Promise<Interview[] | null> {
+  try {
+    const { userId, limit = 20 } = params;
+    const interviews = await db
+      .collection("intterviews")
+      .where("userId", "!=", userId)
+      .where("finalized", "==", true)
+      .orderBy("createdAt", "desc")
+      .limit(limit)
+      .get();
+
+    if (interviews.empty) {
+      return null;
+    }
+
+    return interviews.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    })) as Interview[];
+  } catch (error) {
+    console.log("error", error);
+    return null;
+  }
 }
