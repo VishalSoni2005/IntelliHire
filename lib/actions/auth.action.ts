@@ -44,6 +44,8 @@ export const signUp = async (UserData: SignUpParams) => {
   }
 };
 
+
+
 export const signIn = async (signInInfo: SignInParams) => {
   const { email, idToken } = signInInfo;
   try {
@@ -125,6 +127,30 @@ export async function isAuthenticated() {
 
   return !!user;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export async function getInterviewsByUserId(
   userId: string

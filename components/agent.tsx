@@ -46,9 +46,18 @@ const Agent = ({
       setCallStatus(CallStatus.FINISHED);
     };
 
+    //* Transcriptions are just text versions of spoken words.
+    //* When you speak, Vapi captures your voice, 
+    //* transcribes it in real-time,
+    //*  and emits a message event. This handler stores that message.
     const onMessage = (message: Message) => {
+      //!Receives transcribed input
       if (message.type === "transcript" && message.transcriptType === "final") {
-        const newMessage = { role: message.role, content: message.transcript };
+
+        const newMessage = {
+          role: message.role,
+          content: message.transcript,
+        };
         setMessages((prev) => [...prev, newMessage]);
       }
     };
@@ -67,6 +76,7 @@ const Agent = ({
       console.log("Error:", error);
     };
 
+    //? this event listener will start the call
     vapi.on("call-start", onCallStart);
     vapi.on("call-end", onCallEnd);
     vapi.on("message", onMessage);
