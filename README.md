@@ -39,19 +39,5 @@ This project outlines the workflow for an AI voice assistant system using **Vapi
 
 ---
 
-## 📌 Endpoint Summary
 
-- `POST /api/vapi/generate`
-  - **Purpose**: Accepts processed input from Vapi and interacts with Gemini.
-  - **Request Body**:
-    ```json
-    {
-      "role": "user",
-      "style": "casual",
-      "level": "medium"
-    }
-    ```
-  - **Response**: Generated interview questions from Gemini
-
----
 
