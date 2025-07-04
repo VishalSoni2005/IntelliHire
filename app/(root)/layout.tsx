@@ -23,7 +23,6 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
             alt="logo"
             className="rounded-full shadow-sm bg-white"
           />
-
           <h2 className="text-primary-100"> IntelliHire</h2>
         </Link>
       </nav>

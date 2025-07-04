@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { vapi } from "@/lib/vapi.sdk";
 import { interviewer } from "@/constants";
-// import { createFeedback } from "@/lib/actions/general.action";
+import { createFeedback } from "@/lib/actions/general.action";
 
 enum CallStatus {
   INACTIVE = "INACTIVE",
@@ -30,12 +30,10 @@ const Agent = ({
   questions,
 }: AgentProps) => {
   const router = useRouter();
-
-  const [messages, setMessages] = useState<SavedMessage[]>([]);
-  const [lastMessage, setLastMessage] = useState<string>("");
-
   const [callStatus, setCallStatus] = useState<CallStatus>(CallStatus.INACTIVE);
+  const [messages, setMessages] = useState<SavedMessage[]>([]);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [lastMessage, setLastMessage] = useState<string>("");
 
   useEffect(() => {
     const onCallStart = () => {
@@ -46,18 +44,9 @@ const Agent = ({
       setCallStatus(CallStatus.FINISHED);
     };
 
-    //* Transcriptions are just text versions of spoken words.
-    //* When you speak, Vapi captures your voice, 
-    //* transcribes it in real-time,
-    //*  and emits a message event. This handler stores that message.
     const onMessage = (message: Message) => {
-      //!Receives transcribed input
       if (message.type === "transcript" && message.transcriptType === "final") {
-
-        const newMessage = {
-          role: message.role,
-          content: message.transcript,
-        };
+        const newMessage = { role: message.role, content: message.transcript };
         setMessages((prev) => [...prev, newMessage]);
       }
     };
@@ -76,7 +65,6 @@ const Agent = ({
       console.log("Error:", error);
     };
 
-    //? this event listener will start the call
     vapi.on("call-start", onCallStart);
     vapi.on("call-end", onCallEnd);
     vapi.on("message", onMessage);
@@ -99,27 +87,29 @@ const Agent = ({
       setLastMessage(messages[messages.length - 1].content);
     }
 
-    // const handleGenerateFeedback = async (messages: SavedMessage[]) => {
-    //   console.log("handleGenerateFeedback");
+    const handleGenerateFeedback = async (messages: SavedMessage[]) => {
+      console.log("handleGenerateFeedback");
 
-    //   const { success, feedbackId: id } = await createFeedback({
-    //     interviewId: interviewId!,
-    //     userId: userId!,
-    //     transcript: messages,
-    //     feedbackId,
-    //   });
+      const { success, feedbackId: id } = await createFeedback({
+        interviewId: interviewId!,
+        userId: userId!,
+        transcript: messages,
+        feedbackId,
+      });
 
-    //   if (success && id) {
-    //     router.push(`/interview/${interviewId}/feedback`);
-    //   } else {
-    //     console.log("Error saving feedback");
-    //     router.push("/");
-    //   }
-    // };
+      if (success && id) {
+        router.push(`/interview/${interviewId}/feedback`);
+      } else {
+        console.log("Error saving feedback");
+        router.push("/");
+      }
+    };
 
     if (callStatus === CallStatus.FINISHED) {
       if (type === "generate") {
         router.push("/");
+      } else {
+        handleGenerateFeedback(messages);
       }
     }
   }, [messages, callStatus, feedbackId, interviewId, router, type, userId]);
@@ -127,7 +117,6 @@ const Agent = ({
   const handleCall = async () => {
     setCallStatus(CallStatus.CONNECTING);
 
-    //! on start the call this function will initialize the call
     if (type === "generate") {
       await vapi.start(process.env.NEXT_PUBLIC_VAPI_ID!, {
         variableValues: {
@@ -197,7 +186,8 @@ const Agent = ({
               className={cn(
                 "transition-opacity duration-500 opacity-0",
                 "animate-fadeIn opacity-100"
-              )}>
+              )}
+            >
               {lastMessage}
             </p>
           </div>
@@ -206,9 +196,7 @@ const Agent = ({
 
       <div className="w-full flex justify-center">
         {callStatus !== "ACTIVE" ? (
-          <button
-            className="relative btn-call"
-            onClick={() => handleCall()}>
+          <button className="relative btn-call" onClick={() => handleCall()}>
             <span
               className={cn(
                 "absolute animate-ping rounded-full opacity-75",
@@ -223,9 +211,7 @@ const Agent = ({
             </span>
           </button>
         ) : (
-          <button
-            className="btn-disconnect"
-            onClick={() => handleDisconnect()}>
+          <button className="btn-disconnect" onClick={() => handleDisconnect()}>
             End
           </button>
         )}
