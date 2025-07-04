@@ -1,14 +1,13 @@
 import InterviewCard from "@/components/InterviewCard";
 import { Button } from "@/components/ui/button";
-// import { dummyInterviews } from "@/constants";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { getCurrentUser } from "@/lib/actions/auth.action";
 import {
-  getCurrentUser,
   getInterviewsByUserId,
-  getLatestInterview,
-} from "@/lib/actions/auth.action";
+  getLatestInterviews,
+} from "@/lib/actions/general.action";
 
 const page = async () => {
   const user = await getCurrentUser();
@@ -17,7 +16,7 @@ const page = async () => {
   //! parallel data fetching
   const [userInterviews, latestInterviews] = await Promise.all([
     user?.id ? getInterviewsByUserId(user.id) : [],
-    user?.id ? getLatestInterview({ userId: user.id }) : null,
+    user?.id ? getLatestInterviews({ userId: user.id }) : null,
   ]);
   const hasGivenInterviews = userInterviews && userInterviews.length > 0;
 
@@ -34,9 +33,7 @@ const page = async () => {
             your performance.
           </p>
 
-          <Button
-            asChild
-            className="btn-primary max-sm:w-full">
+          <Button asChild className="btn-primary max-sm:w-full">
             <Link href="/interview"> Get Started </Link>
           </Button>
         </div>
@@ -46,7 +43,8 @@ const page = async () => {
           alt="robot"
           width={400}
           height={400}
-          className="max-md:hidden"></Image>
+          className="max-md:hidden"
+        ></Image>
       </section>
 
       <section className="flex flex-col gap-6 mt-8">
@@ -55,10 +53,7 @@ const page = async () => {
         <div className="interviews-section">
           {hasGivenInterviews
             ? userInterviews?.map((interview) => (
-                <InterviewCard
-                  key={interview.id}
-                  {...interview}
-                />
+                <InterviewCard key={interview.id} {...interview} />
               ))
             : "You haven't given any interviews yet."}
         </div>
@@ -70,10 +65,7 @@ const page = async () => {
         <div className="interviews-section">
           {hasUpcomingInterviews
             ? latestInterviews?.map((interview) => (
-                <InterviewCard
-                  key={interview.id}
-                  {...interview}
-                />
+                <InterviewCard key={interview.id} {...interview} />
               ))
             : "No interviews scheduled yet."}
         </div>

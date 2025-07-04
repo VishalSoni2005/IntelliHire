@@ -44,8 +44,6 @@ export const signUp = async (UserData: SignUpParams) => {
   }
 };
 
-
-
 export const signIn = async (signInInfo: SignInParams) => {
   const { email, idToken } = signInInfo;
   try {
@@ -128,77 +126,53 @@ export async function isAuthenticated() {
   return !!user;
 }
 
+// export async function getInterviewsByUserId(
+//   userId: string
+// ): Promise<Interview[] | null> {
+//   try {
+//     const interviews = await db
+//       .collection("interviews")
+//       .where("userId", "==", userId)
+//       .orderBy("createdAt", "desc")
+//       .get();
 
+//     if (interviews.empty) {
+//       return null;
+//     }
 
+//     return interviews.docs.map((doc) => ({
+//       id: doc.id,
+//       ...doc.data(),
+//     })) as Interview[];
+//   } catch (error) {
+//     console.error("Error fetching interviews:", error);
+//     return null;
+//   }
+// }
 
+// export async function getLatestInterview(
+//   params: GetLatestInterviewsParams
+// ): Promise<Interview[] | null> {
+//   try {
+//     const { userId, limit = 20 } = params;
+//     const interviews = await db
+//       .collection("interviews")
+//       .where("userId", "!=", userId)
+//       .where("finalized", "==", true)
+//       .orderBy("createdAt", "desc")
+//       .limit(limit)
+//       .get();
 
+//     if (interviews.empty) {
+//       return null;
+//     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-export async function getInterviewsByUserId(
-  userId: string
-): Promise<Interview[] | null> {
-  try {
-    const interviews = await db
-      .collection("intterviews")
-      .where("userId", "==", userId)
-      .orderBy("createdAt", "desc")
-      .get();
-
-    if (interviews.empty) {
-      return null;
-    }
-
-    return interviews.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    })) as Interview[];
-  } catch (error) {
-    console.error("Error fetching interviews:", error);
-    return null;
-  }
-}
-
-export async function getLatestInterview(
-  params: GetLatestInterviewsParams
-): Promise<Interview[] | null> {
-  try {
-    const { userId, limit = 20 } = params;
-    const interviews = await db
-      .collection("intterviews")
-      .where("userId", "!=", userId)
-      .where("finalized", "==", true)
-      .orderBy("createdAt", "desc")
-      .limit(limit)
-      .get();
-
-    if (interviews.empty) {
-      return null;
-    }
-
-    return interviews.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    })) as Interview[];
-  } catch (error) {
-    console.log("error", error);
-    return null;
-  }
-}
+//     return interviews.docs.map((doc) => ({
+//       id: doc.id,
+//       ...doc.data(),
+//     })) as Interview[];
+//   } catch (error) {
+//     console.log("error", error);
+//     return null;
+//   }
+// }

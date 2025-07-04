@@ -5,10 +5,11 @@ import Image from "next/image";
 import { getRandomInterviewCover } from "@/lib/utils";
 import { Button } from "./ui/button";
 import Link from "next/link";
-import CardTechIcon from './CardTechIcon';
+import CardTechIcon from "./CardTechIcon";
+import { getFeedbackByInterviewId } from "@/lib/actions/general.action";
 
 interface InterviewCardProps {
-  interviewId?: string;
+  id?: string;
   userId?: string;
   role: string;
   type: string;
@@ -16,15 +17,18 @@ interface InterviewCardProps {
   createdAt?: string;
 }
 
-const InterviewCard = ({
-  interviewId,
+const InterviewCard = async ({
+  id,
   userId,
   role,
   type,
   techstack,
   createdAt,
 }: InterviewCardProps) => {
-  const feedback = null as Feedback | null;
+  const feedback =
+    userId && id
+      ? await getFeedbackByInterviewId({ interviewId: id, userId })
+      : null;
 
   const normalizedType = /mix/gi.test(type) ? "Mixed" : type;
 
@@ -56,17 +60,13 @@ const InterviewCard = ({
                 src="/calender.svg"
                 width={22}
                 height={22}
-                alt="calender"></Image>
+                alt="calender"
+              ></Image>
               <p>{formatDate}</p>
             </div>
 
             <div className="flex flex-row gap-2 items-center">
-              <Image
-                src="/star.svg"
-                width={22}
-                height={22}
-                alt="star"
-              />
+              <Image src="/star.svg" width={22} height={22} alt="star" />
               <p>{feedback?.totalScore || "---"}/100</p>
             </div>
           </div>
@@ -83,9 +83,10 @@ const InterviewCard = ({
             <Link
               href={
                 feedback
-                  ? `/interview/${interviewId}/feedback`
-                  : `/interview/${interviewId}/${userId}`
-              }>
+                  ? `/interview/${id}/feedback`
+                  : `/interview/${id}/${userId}`
+              }
+            >
               {feedback ? "View Feedback" : "Take Interview"}
             </Link>
           </Button>
@@ -96,7 +97,6 @@ const InterviewCard = ({
 };
 
 export default InterviewCard;
-
 
 // import dayjs from "dayjs";
 // import Image from "next/image";
