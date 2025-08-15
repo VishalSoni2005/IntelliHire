@@ -1,4 +1,4 @@
-1234
+
 # AI Voice Agent Workflow
 
 This project outlines the workflow for an AI voice assistant system using **Vapi**, **Google Gemini**, and **Firebase Firestore**. The system captures user voice input, processes it with an AI agent, generates a response using Gemini, and stores the relevant question in Firestore.
