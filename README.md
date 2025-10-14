@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> 98690e7209f382c0828752ee5bf7cab822a90169
 # AI Voice Agent Workflow
 
 This project outlines the workflow for an AI voice assistant system using **Vapi**, **Google Gemini**, and **Firebase Firestore**. The system captures user voice input, processes it with an AI agent, generates a response using Gemini, and stores the relevant question in Firestore.
@@ -61,25 +57,41 @@ This project outlines the workflow for an AI voice assistant system using **Vapi
 
 ---
 
-
 {
-  "$schema": "https://ui.shadcn.com/schema.json",
-  "style": "new-york",
-  "rsc": true,
-  "tsx": true,
-  "tailwind": {
-    "config": "",
-    "css": "app/globals.css",
-    "baseColor": "neutral",
-    "cssVariables": true,
-    "prefix": ""
-  },
-  "aliases": {
-    "components": "@/components",
-    "utils": "@/lib/utils",
-    "ui": "@/components/ui",
-    "lib": "@/lib",
-    "hooks": "@/hooks"
-  },
-  "iconLibrary": "lucide"
+"$schema": "https://ui.shadcn.com/schema.json",
+"style": "new-york",
+"rsc": true,
+"tsx": true,
+"tailwind": {
+"config": "",
+"css": "app/globals.css",
+"baseColor": "neutral",
+"cssVariables": true,
+"prefix": ""
+},
+"aliases": {
+"components": "@/components",
+"utils": "@/lib/utils",
+"ui": "@/components/ui",
+"lib": "@/lib",
+"hooks": "@/hooks"
+},
+"iconLibrary": "lucide"
 }
+
+### Flow of project:
+
+1: take interview should show multiple interviews
+
+2: you will click to "Get Started" button tell ai that what type of interview you want
+tell:: role -> type of exp -> job level -> how many question -> tech stack
+3: Redirected to dashboard where you see generated interview, click to interview and give it
+
+4: then after you complete the interview you will be redirected to /feedback page
+5: then after the interview will go to "/dashboard" section
+
+### Additional features: 
+1: Custom interview section where you can select question to practice and solve
+  Embed language compiler just like in leetcode
+
+2: interviewer can watch interviewer give coding question and candidate can share the screen to solve problem

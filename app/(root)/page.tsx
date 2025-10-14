@@ -9,10 +9,12 @@ import {
   getLatestInterviews,
 } from "@/lib/actions/general.action";
 import { ArrowRight, Sparkles, Zap } from "lucide-react";
+import AnimatedBot from "@/components/AnimatedBot";
 
 const page = async () => {
+  
   const user = await getCurrentUser();
-  console.log("user", user);
+  console.log("user id", user?.id);
 
   //! parallel data fetching
   const [userInterviews, latestInterviews] = await Promise.all([
@@ -26,6 +28,7 @@ const page = async () => {
     <>
       <section className="relative flex flex-col-reverse md:flex-row items-center justify-between gap-8 max-w-6xl mx-auto p-8">
         {/* Text Content */}
+        <AnimatedBot/>
         <div className="flex-1 flex flex-col gap-6">
           <div className="flex items-center gap-3">
             <div className="relative">
@@ -95,8 +98,9 @@ const page = async () => {
         </div>
       </section>
 
+      {/* //! From here add fire store database */}
       <section className="flex flex-col gap-6 mt-8">
-        <h2>Take an Interview</h2>
+        <h2>Trending Interviews</h2>
 
         <div className="interviews-section">
           {hasUpcomingInterviews
