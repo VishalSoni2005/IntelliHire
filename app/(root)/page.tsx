@@ -4,17 +4,12 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { getCurrentUser } from "@/lib/actions/auth.action";
-import {
-  getInterviewsByUserId,
-  getLatestInterviews,
-} from "@/lib/actions/general.action";
+import { getInterviewsByUserId, getLatestInterviews } from "@/lib/actions/general.action";
 import { ArrowRight, Sparkles, Zap } from "lucide-react";
-import AnimatedBot from "@/components/AnimatedBot";
+import AnimatedBotLoader from "@/components/AnimatedBotLoader";
 
 const page = async () => {
-  
   const user = await getCurrentUser();
-  console.log("user id", user?.id);
 
   //! parallel data fetching
   const [userInterviews, latestInterviews] = await Promise.all([
@@ -28,7 +23,7 @@ const page = async () => {
     <>
       <section className="relative flex flex-col-reverse md:flex-row items-center justify-between gap-8 max-w-6xl mx-auto p-8">
         {/* Text Content */}
-        <AnimatedBot/>
+        <AnimatedBotLoader />
         <div className="flex-1 flex flex-col gap-6">
           <div className="flex items-center gap-3">
             <div className="relative">
@@ -49,25 +44,16 @@ const page = async () => {
           </h2>
 
           <p className="text-lg text-gray-300 leading-relaxed">
-            Practice on{" "}
-            <span className="text-white font-medium">
-              real interview questions
-            </span>{" "}
-            and get{" "}
-            <span className="text-purple-400 font-medium">
-              instant feedback
-            </span>{" "}
-            on your performance.
+            Practice on <span className="text-white font-medium">real interview questions</span> and
+            get <span className="text-purple-400 font-medium">instant feedback</span> on your
+            performance.
           </p>
 
           <Button
             asChild
             className="relative bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg hover:shadow-purple-500/25 max-sm:w-full overflow-hidden"
           >
-            <Link
-              href="/interview"
-              className="flex items-center justify-center gap-2"
-            >
+            <Link href="/interview" className="flex items-center justify-center gap-2">
               <span className="relative z-10">Get Started</span>
               <ArrowRight className="relative z-10 w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
             </Link>
